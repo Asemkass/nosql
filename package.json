@@ -1,7 +1,8 @@
 {
     "name": "nosql-app",
     "version": "1.0.0",
-    "main": "nosql.js",
+    "main": "nosql.js",  
+    "type":"module",
     "scripts": {
       "start": "node nosql.js"
     },
