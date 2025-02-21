@@ -126,7 +126,7 @@ app.post("/orders",  async (req, res) => {
     }
 });
 
-app.get("/orders", authMiddleware, async (req, res) => {
+app.get("/orders",  async (req, res) => {
     try {
         const userOrders = await Order.find({ user: req.user.id }).populate("boots");
         res.json(userOrders);
