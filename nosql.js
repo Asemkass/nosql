@@ -12,14 +12,14 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// MongoDB Connection
+
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => console.log("MongoDB connected"))
   .catch(err => console.error("MongoDB connection error:", err));
 
-// Boot Schema
+
 const bootSchema = new mongoose.Schema({
     "Размерный ряд": String,
     "Сезонность": String,
@@ -35,7 +35,7 @@ const bootSchema = new mongoose.Schema({
 
 const Boot = mongoose.model("Boot", bootSchema);
 
-// User Schema
+
 const userSchema = new mongoose.Schema({
     username: { type: String, unique: true, required: true },
     password: { type: String, required: true },
@@ -54,7 +54,7 @@ const orderSchema = new mongoose.Schema({
 
 const Order = mongoose.model("Order", orderSchema);
 
-// Middleware for authentication
+
 const authMiddleware = (req, res, next) => {
     const token = req.header("Authorization");
     if (!token) return res.status(401).json({ error: "Access denied" });
@@ -67,13 +67,13 @@ const authMiddleware = (req, res, next) => {
     }
 };
 
-// Middleware for admin authorization
+
 const adminMiddleware = (req, res, next) => {
     if (req.user.role !== "admin") return res.status(403).json({ error: "Admin access required" });
     next();
 };
 
-// User Registration
+
 app.post("/register", async (req, res) => {
     const { username, password, role } = req.body;
 
@@ -92,7 +92,7 @@ app.post("/register", async (req, res) => {
 });
 
 
-// User Login
+
 app.post("/login", async (req, res) => {
     const { username, password } = req.body;
     const user = await User.findOne({ username });
@@ -136,7 +136,7 @@ app.get("/orders", authMiddleware, async (req, res) => {
     }
 });
 
-// CRUD Operations
+
 app.post("/boots", authMiddleware, adminMiddleware, async (req, res) => {
     const boot = new Boot(req.body);
     await boot.save();
